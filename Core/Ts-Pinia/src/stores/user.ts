@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { reactive, computed, toRefs } from "vue";
 import type { UserInfo } from "./types/user";
 
 const mockLoginApi = async () => ({
@@ -10,33 +10,34 @@ const mockLoginApi = async () => ({
 
 export const useUserStore = defineStore('user', () => {
     //state
-    const userInfo = ref<UserInfo | null>(null)
-    const isLogin = ref<boolean>(false)
+    const state = reactive({
+        userInfo: null as UserInfo | null,
+        isLogin: false,
+    })
 
     //getters
-    const displayName = computed(() => userInfo.value?.nickname || 'Guest')
+    const displayName = computed(() => state.userInfo?.nickname || 'Guest')
 
     //actions
     const Login = async () => {
         const data = await mockLoginApi()
-        userInfo.value = data
-        isLogin.value = true
+        state.userInfo = data
+        state.isLogin = true
     }
 
     const LogOut = () => {
-        userInfo.value = null
-        isLogin.value = false
+        state.userInfo = null
+        state.isLogin = false
     }
 
     const updateNickName = (newNickName: string) => {
-        if (userInfo.value) {
-            userInfo.value.nickname = newNickName
+        if (state.userInfo) {
+            state.userInfo.nickname = newNickName
         }
     }
 
     return {
-        userInfo,
-        isLogin,
+        ...toRefs(state),
         displayName,
         Login,
         LogOut,

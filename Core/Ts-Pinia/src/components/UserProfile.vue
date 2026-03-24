@@ -7,7 +7,7 @@
     </div>
     <div v-else>
         <p>you no login,please login</p>
-        <button @click=Login>login</button>
+        <button @click="Login">login</button>
     </div>
 </template>
 
@@ -19,8 +19,8 @@ const userStore = useUserStore()
 const Login = () => {
     userStore.Login()
 }
-const LogOut = () => {
-    userStore.LogOut()
+const LogOut = async () => {
+    await userStore.LogOut()
 }
 const handleUpdateNickName = () => {
     const newNickName = prompt('please input your new nickname')
