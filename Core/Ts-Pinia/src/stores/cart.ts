@@ -16,13 +16,14 @@ export const useCartStore = defineStore('cart', () => {
         }, 0)
     })
 
-    const addItem = (goodsId: number, quantity: number = 1) => {
+    const addItem = (name: string, goodsId: number, quantity: number = 1) => {
         const existing = items.value.find(item => item.goodsId == goodsId)
 
         if (existing) {
             existing.quantity += quantity
         } else {
             items.value.push({
+                name,
                 goodsId,
                 quantity
             })
@@ -33,5 +34,15 @@ export const useCartStore = defineStore('cart', () => {
         items,
         totalPrice,
         addItem
+    }
+}, {
+    persist: {
+        key: 'shopping-cart',
+        storage: localStorage,
+        pick: ['items'],
+        serializer: {
+            serialize: (value) => JSON.stringify(value),
+            deserialize: (value) => JSON.parse(value)
+        }
     }
 })
