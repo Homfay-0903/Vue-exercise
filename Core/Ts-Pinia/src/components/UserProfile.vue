@@ -2,12 +2,12 @@
     <div v-if="userStore.isLogin">
         <p>welcome! {{ userStore.displayName }}</p>
         <p>your id is {{ userStore.userInfo?.id }}, accout is {{ userStore.userInfo?.account }}</p>
-        <button @click="LogOut()">LogOut</button>
-        <button @click="handleUpdateNickName()">updateNickName</button>
+        <button @click="LogOut">LogOut</button>
+        <button @click="handleUpdateNickName">updateNickName</button>
     </div>
     <div v-else>
         <p>you no login,please login</p>
-        <button @click=Login()>login</button>
+        <button @click=Login>login</button>
     </div>
 </template>
 
