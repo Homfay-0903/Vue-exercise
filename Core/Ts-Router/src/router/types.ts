@@ -9,6 +9,7 @@ export interface AppRouteMeta extends RouteMeta {
 export const RouteNames = {
     Home: 'Home',
     Login: 'Login',
+    LogOut: 'LogOut',
     ProductList: 'ProductList',
     ProductDetail: 'ProductDetail',
     NotFound: 'NotFound',
