@@ -10,6 +10,8 @@ export const RouteNames = {
     Home: 'Home',
     Login: 'Login',
     LogOut: 'LogOut',
+    UserProfile: 'UserProfile',
+    AdminPanel: 'AdminPanel',
     ProductList: 'ProductList',
     ProductDetail: 'ProductDetail',
     NotFound: 'NotFound',

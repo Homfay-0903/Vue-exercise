@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { RouteNames, type AppRouteRecordRaw } from "./types";
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+import { setupDynamicRoutes, getUserRole, getRoutesAdded, setRoutesAdded } from './permission';
 
 type Component = () => Promise<typeof import('*.vue')>
 
@@ -61,6 +62,8 @@ const router = createRouter({
 
 const getIsLogined = () => !!localStorage.getItem('token')
 
+let routesAdded = false
+
 router.beforeEach((
     to: RouteLocationNormalized,
     _from: RouteLocationNormalized,
@@ -72,7 +75,14 @@ router.beforeEach((
         if (!getIsLogined()) {
             next({ name: RouteNames.Login, query: { redirect: to.fullPath } })
         } else {
-            next()
+            const userRole = getUserRole()
+            if (userRole && !routesAdded) {
+                setupDynamicRoutes(userRole)
+                routesAdded = true
+                next({ ...to, replace: true })
+            } else {
+                next()
+            }
         }
     } else {
         next()
