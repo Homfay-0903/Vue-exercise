@@ -8,6 +8,8 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useTypedRouterPush } from '../hooks/useRouterPush'
+import { RouteNames } from '../router/types'
 
 interface ProductOverviewProps {
     id: number
@@ -16,10 +18,11 @@ interface ProductOverviewProps {
 }
 
 const router = useRouter()
+const push = useTypedRouterPush()
 const props = defineProps<ProductOverviewProps>()
 
 const handleJump = () => {
-    router.push({ name: 'ProductDetail', params: { id: props.id } })
+    push(RouteNames.ProductDetail, { id: props.id });
 }
 </script>
 
