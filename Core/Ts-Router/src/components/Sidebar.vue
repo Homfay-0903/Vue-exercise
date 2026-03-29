@@ -10,18 +10,28 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed, watch, ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import type { AppRouteRecordRaw } from '../router/types';
 import { RouteNames } from '../router/types';
 import { getUserRole } from '../router/permission';
 
 const router = useRouter()
-const userRole = getUserRole()
+const route = useRoute()
+
+// 使用 ref 来存储用户角色，这样可以通过 watch 来更新
+const userRole = ref(getUserRole())
+
+// 监听路由变化，当路由变化时重新获取用户角色
+watch(() => route.path, () => {
+    userRole.value = getUserRole()
+}, { immediate: true })
 
 // 过滤出侧边栏需要显示的路由（排除登录页和404，并根据角色过滤）
 const sidebarRoutes = computed(() => {
     const routes = router.getRoutes()
+    console.log(routes)
+    const currentRole = userRole.value
     return routes.filter((route) => {
         const r = route as unknown as AppRouteRecordRaw
         if (!r.meta?.title) return false
@@ -29,7 +39,7 @@ const sidebarRoutes = computed(() => {
 
         // 检查角色权限
         if (r.meta?.roles && r.meta.roles.length > 0) {
-            return r.meta.roles.includes(userRole as string)
+            return r.meta.roles.includes(currentRole as string)
         }
 
         return true

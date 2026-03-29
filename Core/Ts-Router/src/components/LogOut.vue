@@ -15,7 +15,7 @@ const handleLogOut = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('userRole')
     resetRoutesAdded()
-    removeDynamicRoutes()
+    removeDynamicRoutes(router)
     router.push('/login')
 }
 </script>

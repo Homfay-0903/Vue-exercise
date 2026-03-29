@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+//import { useRouter } from 'vue-router'
 import { useTypedRouterPush } from '../hooks/useRouterPush'
 import { RouteNames } from '../router/types'
 
@@ -17,7 +17,7 @@ interface ProductOverviewProps {
     price: number
 }
 
-const router = useRouter()
+//const router = useRouter()
 const push = useTypedRouterPush()
 const props = defineProps<ProductOverviewProps>()
 

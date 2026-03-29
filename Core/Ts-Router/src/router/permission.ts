@@ -1,4 +1,4 @@
-import router from './index'
+import type { Router } from 'vue-router'
 import { RouteNames } from './types'
 import type { AppRouteRecordRaw } from './types'
 
@@ -40,7 +40,7 @@ export const getUserRole = (): 'admin' | 'user' | null => {
 }
 
 // 清理动态路由
-export const removeDynamicRoutes = () => {
+export const removeDynamicRoutes = (router: Router) => {
     const routes = router.getRoutes()
     routes.forEach((route) => {
         if (route.name === RouteNames.AdminPanel || route.name === RouteNames.UserProfile) {
@@ -50,13 +50,13 @@ export const removeDynamicRoutes = () => {
 }
 
 // 设置动态路由
-export const setupDynamicRoutes = (role: 'admin' | 'user') => {
+export const setupDynamicRoutes = (router: Router, role: 'admin' | 'user') => {
     const routeSToAdd = role === 'admin' ? adminRoutes : userRoutes
 
     routeSToAdd.forEach((route) => router.addRoute(route))
 }
 
-// 重置路由添加标志
+// 重置/读取路由添加标志（供外部模块使用）
 let routesAdded = false
 export const resetRoutesAdded = () => {
     routesAdded = false

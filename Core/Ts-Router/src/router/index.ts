@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import { RouteNames, type AppRouteRecordRaw } from "./types";
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { setupDynamicRoutes, getUserRole, getRoutesAdded, setRoutesAdded } from './permission';
+import { adminRoutes, userRoutes } from "./permission";
 
 type Component = () => Promise<typeof import('*.vue')>
 
@@ -62,7 +63,7 @@ const router = createRouter({
 
 const getIsLogined = () => !!localStorage.getItem('token')
 
-let routesAdded = false
+
 
 router.beforeEach((
     to: RouteLocationNormalized,
@@ -71,14 +72,39 @@ router.beforeEach((
 ) => {
     document.title = (to.meta.title as string) || 'vue app'
 
+    //if (getIsLogined()) {
+    //    const userRole = getUserRole()
+    //    if (userRole && !getRoutesAdded()) {
+    //        setupDynamicRoutes(router, userRole)
+    //        setRoutesAdded(true)
+    //        next({ ...to, replace: true })
+    //        return
+    //    }
+    //}
+    //
+    //// 如果没有匹配到任何路由，尝试在已登录时添加动态路由并重试
+    //if (!to.matched || to.matched.length === 0) {
+    //    if (getIsLogined()) {
+    //        const userRole = getUserRole()
+    //        if (userRole && !getRoutesAdded()) {
+    //            setupDynamicRoutes(router, userRole)
+    //            setRoutesAdded(true)
+    //            next({ ...to, replace: true })
+    //            return
+    //        }
+    //    }
+    //    next({ name: RouteNames.NotFound })
+    //    return
+    //}
+
     if (to.meta.requiresAuth) {
         if (!getIsLogined()) {
             next({ name: RouteNames.Login, query: { redirect: to.fullPath } })
         } else {
             const userRole = getUserRole()
-            if (userRole && !routesAdded) {
-                setupDynamicRoutes(userRole)
-                routesAdded = true
+            if (userRole && !getRoutesAdded()) {
+                setupDynamicRoutes(router, userRole)
+                setRoutesAdded(true)
                 next({ ...to, replace: true })
             } else {
                 next()
