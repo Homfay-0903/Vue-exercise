@@ -7,6 +7,7 @@ export const useDebounce = <T>(value: Ref<T>, delay: number = 500): Ref<T> => {
 
     const stop = watch(
         value,
+        //() => value.value,
         (newVal) => {
             if (timer) {
                 clearTimeout(timer)
