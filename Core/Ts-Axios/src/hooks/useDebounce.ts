@@ -1,34 +1,38 @@
 import { ref, watch, onUnmounted } from 'vue'
+import type { Ref } from 'vue'
 
-export const useDebounce = <T>(value: T, delay: number = 500) => {
-    const debounceValue = ref<T>(value)
-    let timer: number | null = null
+export const useDebounce = <T>(value: Ref<T>, delay: number = 500): Ref<T> => {
+    const debounced = ref<T>(value.value) as Ref<T>
+    let timer: ReturnType<typeof setTimeout> | null = null
 
-    watch(
-        () => value,
+    const stop = watch(
+        value,
         (newVal) => {
             if (timer) {
                 clearTimeout(timer)
             }
             timer = setTimeout(() => {
-                debounceValue.value = newVal
-            }, delay);
+                debounced.value = newVal
+            }, delay)
         },
-        { immediate: true }
+        { immediate: false }
     )
 
     onUnmounted(() => {
         if (timer) {
             clearTimeout(timer)
         }
+        stop()
     })
+
+    return debounced
 }
 
 export const debounce = <T extends (...args: any[]) => void>(
     fn: T,
     delay: number = 500
 ): (...args: Parameters<T>) => void => {
-    let timer: number | null = null
+    let timer: ReturnType<typeof setTimeout> | null = null
 
     return (...args: Parameters<T>) => {
         if (timer) {

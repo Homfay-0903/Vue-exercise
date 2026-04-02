@@ -1,9 +1,9 @@
 import axios from 'axios';
 import type { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import type { ApiResponse } from './types';
+//import type { ApiResponse } from './types';
 
 const request: AxiosInstance = axios.create({
-    baseURL: 'http://127.0.0.1:3000/',
+    baseURL: 'https://jsonplaceholder.typicode.com',
     timeout: 15000
 })
 
@@ -28,15 +28,18 @@ request.interceptors.request.use(
 
 // 响应拦截器
 request.interceptors.response.use(
-    (response: AxiosResponse<ApiResponse>) => {
+    (response: AxiosResponse<any>) => {
         const res = response.data
 
-        if (res.code !== 0) {
-            const errorMsg = getErrorMessage(res.code, res.message)
-            return Promise.reject(new Error(errorMsg))
+        if (res && typeof res === 'object' && !Array.isArray(res) && 'code' in res) {
+            if (res.code !== 0) {
+                const errorMsg = getErrorMessage(res.code, res.message)
+                return Promise.reject(new Error(errorMsg))
+            }
+            return res.data
         }
 
-        return res.data
+        return res
     },
     (error) => {
         let message = '网络异常，请稍后重试';
