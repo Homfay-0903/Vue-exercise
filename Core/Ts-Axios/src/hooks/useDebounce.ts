@@ -5,7 +5,7 @@ export const useDebounce = <T>(value: Ref<T>, delay: number = 500): Ref<T> => {
     const debounced = ref<T>(value.value) as Ref<T>
     let timer: ReturnType<typeof setTimeout> | null = null
 
-    const stop = watch(
+    const watchHandler = watch(
         value,
         //() => value.value,
         (newVal) => {
@@ -23,7 +23,7 @@ export const useDebounce = <T>(value: Ref<T>, delay: number = 500): Ref<T> => {
         if (timer) {
             clearTimeout(timer)
         }
-        stop()
+        watchHandler.stop()
     })
 
     return debounced
