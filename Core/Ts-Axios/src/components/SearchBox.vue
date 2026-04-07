@@ -11,12 +11,19 @@
         </ul>
         <div v-else-if="!loading && keyword" class="empty">暂无数据</div>
     </div>
+    <hr>
+    <div>
+        <input type="text" v-model="initValue">
+        <p>{{ initValue }}</p>
+        <p>{{ throttleValue }}</p>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useRequest } from '../hooks/useRequest';
 import { useDebounce } from '../hooks/useDebounce';
+import { useThrottle } from '../hooks/useThrottle';
 import { withCache } from '../hooks/useCache';
 import { searchAPI } from '../api/search';
 import type { SearchResult } from '../http/types';
@@ -24,6 +31,9 @@ import { DEFAULT_SEARCH_RESULT } from '../http/types';
 
 const keyword = ref('');
 const debouncedKeyword = useDebounce(keyword, 1000);
+
+const initValue = ref('')
+const throttleValue = useThrottle(initValue, 3000)
 
 // 对原始 API 函数应用缓存（5分钟）
 const cachedSearch = withCache(searchAPI, 5 * 60 * 1000);
