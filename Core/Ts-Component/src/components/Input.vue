@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input type="text" v-model="inputValue" :placeholder="placeholder" :disabled="disabled">
+        <input type="text" v-model="inputValue" :placeholder="placeholder" :disabled="disabled" @input="handleInput">
         <span v-if="inputValue && clearable && !disabled" @click="handleClear">x</span>
     </div>
 
@@ -38,6 +38,8 @@ const inputValue = computed({
 const handleClear = () => {
     emits('update:modelValue', '')
 }
+
+const handleInput = () => { }
 </script>
 
 <style scoped></style>
