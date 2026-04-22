@@ -23,6 +23,8 @@
     <TabPane label="Role" name="third">Role 内容</TabPane>
     <TabPane label="Task" name="fourth">Task 内容</TabPane>
   </Tab>
+  <hr>
+  <List ref="listRef" @load-data="getData" />
 </template>
 
 <script setup lang="ts">
@@ -33,6 +35,8 @@ import Input from './components/Input.vue';
 import Modal from './components/Modal.vue';
 import Tab from './components/Tab.vue';
 import TabPane from './components/TabPane.vue';
+import List from './components/List2.vue';
+import type { ListItem } from './components/List.vue';
 
 const value = ref('')
 const modalVisible = ref(false)
@@ -43,6 +47,41 @@ const handleVisible = () => {
 }
 const handleClick = (pane: TabPaneProps) => {
   console.log(pane)
+}
+
+const listRef = ref<any>(null);//?
+//const mockData = (page: number, size: number): ListItem[] => {
+//  return Array.from({ length: size }, (_, i) => ({
+//    id: (page - 1) * size + i + 1,
+//    content: `列表项 ${(page - 1) * size + i + 1}`,
+//  }));
+//};
+
+const mockData = (page: number, size: number): ListItem[] => {
+  return Array.from({ length: size }, (_, i) => ({
+    id: (page - 1) * size + i + 1,
+    content: `now is ${(page - 1) * size + i + 1}`
+  }))
+}
+
+// 模拟请求
+//const getData = async (page: number) => {
+//  // 模拟接口延迟
+//  await new Promise(resolve => setTimeout(resolve, 800));
+//
+//  const data = mockData(page, 10);
+//  // 第5页后没有更多
+//  const isLast = page >= 5;
+//  listRef.value?.setList(data, isLast);
+//};
+
+const getData = async (page: number) => {
+  await new Promise(reslove => setTimeout(reslove, 800))
+
+  const data = mockData(page, 10)
+  const isLast = page >= 5
+
+  listRef.value.setList(data, isLast)
 }
 </script>
 
