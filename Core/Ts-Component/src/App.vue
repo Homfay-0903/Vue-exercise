@@ -25,6 +25,8 @@
   </Tab>
   <hr>
   <List ref="listRef" @load-data="getData" />
+  <hr>
+  <Formview></Formview>
 </template>
 
 <script setup lang="ts">
@@ -35,7 +37,8 @@ import Input from './components/Input.vue';
 import Modal from './components/Modal.vue';
 import Tab from './components/Tab.vue';
 import TabPane from './components/TabPane.vue';
-import List from './components/List2.vue';
+import List from './components/List.vue';
+import Formview from './views/Formview.vue';
 import type { ListItem } from './components/List.vue';
 
 const value = ref('')
