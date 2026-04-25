@@ -7,13 +7,14 @@
             <input v-model="form.password" @input="clearError('password')" />
         </FormItem>
         <button @click="submit">提交</button>
+        <button @click="reset">重置</button>
     </Form>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import Form from '../components/Form.vue'
-import FormItem from '../components/FormItem.vue'
+import Form from '../components/Form2.vue'
+import FormItem from '../components/FormItem2.vue'
 
 const formRef = ref()
 const form = reactive({
@@ -28,6 +29,10 @@ const rules = {
 const submit = () => {
     const ok = formRef.value.validate()
     if (ok) console.log('提交成功', form)
+}
+
+const reset = () => {
+    formRef.value.reset()
 }
 
 // 清除指定字段错误
