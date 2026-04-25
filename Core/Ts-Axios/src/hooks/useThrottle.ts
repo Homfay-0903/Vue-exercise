@@ -52,6 +52,30 @@ export const useThrottle = <T>(
     return throttled
 }
 
+export const useThrottle2 = <T>(value: Ref<T>, delay: number = 500): Ref<T> => {
+    const throttled = ref<T>(value.value) as Ref<T>
+    let lastTime = 0
+
+    const watchHandler = watch(
+        value,
+        (newVal) => {
+            const now = Date.now()
+
+            if (now - lastTime < delay) {
+                return
+            }
+
+            lastTime = now
+            throttled.value = newVal
+        }
+    )
+
+    onUnmounted(() => {
+        watchHandler.stop()
+    })
+
+    return throttled
+}
 
 export const throttle = <T extends (...args: any[]) => void>(
     fn: T,
@@ -72,3 +96,20 @@ export const throttle = <T extends (...args: any[]) => void>(
     }
 }
 
+export const throttle2 = <T extends (...args: any[]) => void>(
+    fn: T,
+    delay: number = 500
+): (...args: Parameters<T>) => void => {
+    let lastTime = 0
+
+    return (...args: Parameters<T>) => {
+        const now = Date.now()
+
+        if (now - lastTime < delay) {
+            return
+        }
+
+        lastTime = now
+        fn(...args)
+    }
+}
