@@ -29,6 +29,33 @@ export const useDebounce = <T>(value: Ref<T>, delay: number = 500): Ref<T> => {
     return debounced
 }
 
+export const useDebounce2 = <T>(value: Ref<T>, delay: number = 500): Ref<T> => {
+    const debounced = ref<T>(value.value) as Ref<T>
+    let timer: ReturnType<typeof setTimeout> | null = null
+
+    const watchHandler = watch(
+        value,
+        (newVal) => {
+            if (timer) {
+                clearTimeout(timer)
+            }
+
+            timer = setTimeout(() => {
+                debounced.value = newVal
+            }, delay)
+        })
+
+    onUnmounted(() => {
+        if (timer) {
+            clearTimeout(timer)
+        }
+
+        watchHandler.stop()
+    })
+
+    return debounced
+}
+
 export const debounce = <T extends (...args: any[]) => void>(
     fn: T,
     delay: number = 500
