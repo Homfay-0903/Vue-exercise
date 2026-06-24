@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import InfoBox from './components/InfoBox.vue'
 import VirtualListDemo from './components/VirtualListDemo.vue'
 import CodeExample from './components/CodeExample.vue'
+import FileUpload from './components/FileUpload.vue'
 
 /**
  * 虚拟化列表工作原理：
@@ -35,7 +36,12 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <h1>虚拟化列表 Demo</h1>
+    <h1>Vue3 性能优化 Demo</h1>
+
+    <!-- 文件分片上传 Demo -->
+    <section class="demo-section">
+      <FileUpload />
+    </section>
 
     <!-- 说明区域 -->
     <InfoBox />
@@ -60,5 +66,13 @@ h1 {
   text-align: center;
   color: #2c3e50;
   margin-bottom: 30px;
+}
+
+.demo-section {
+  margin-bottom: 40px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 </style>
